@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16181d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Flip 7 Score">
+<title>Flip 7 Score</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#0d0f12;--panel:#181b21;--panel2:#222630;--text:#f6f7f8;--muted:#aeb4c0;--accent:#ffcc33;--danger:#ff5f57;--ok:#54d67b;--line:#303642}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom))}.app{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}.logo{width:48px;height:48px;border-radius:14px;background:var(--accent);color:#111;display:grid;place-items:center;font-size:28px;font-weight:900;box-shadow:0 8px 24px #0008}.brand h1{margin:0;font-size:28px}.brand p{margin:2px 0 0;color:var(--muted);font-size:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #0003}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}input,select,button{font:inherit}input[type=text],input[type=number],select{width:100%;background:#0f1116;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px}.player-name{margin:8px 0}.btn{border:0;border-radius:13px;padding:13px 16px;font-weight:800;min-height:48px;cursor:pointer}.primary{background:var(--accent);color:#111}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.danger{background:#3a1717;color:#ffb5b0;border:1px solid #6b2727}.small{min-height:40px;padding:9px 12px;font-size:14px}.scoreboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.score{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.score .name{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.score .total{font-size:34px;font-weight:900;margin-top:3px}.leader{border-color:#76611b;box-shadow:inset 0 0 0 1px #76611b}.round-player{padding:14px 0;border-top:1px solid var(--line)}.round-player:first-child{border-top:0;padding-top:0}.round-player h3{margin:0 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}.checks{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.check{display:flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);padding:9px 11px;border-radius:11px;font-size:14px}.check input{width:20px;height:20px}.preview{font-weight:900;font-size:20px;margin-top:10px}.preview .zero{color:var(--danger)}.hint{color:var(--muted);font-size:13px;line-height:1.4}.winner{background:#20311f;border-color:#3d6c3d}.winner h2{margin:0 0 6px;color:#a7f0a7}.history-item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}.history-item:first-child{border-top:0}.pill{display:inline-block;background:var(--panel2);padding:4px 8px;border-radius:999px;color:var(--muted);font-size:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}.hidden{display:none!important}@media(min-width:600px){.scoreboard{grid-template-columns:repeat(4,1fr)}}
+.home-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-weight:750;font-size:14px;margin:0 0 14px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+</style>
+</head>
+<body><div class="app"><a class="home-link" href="../">‹ Todos los juegos</a></div><main class="app" id="app"></main>
+<script>
+const KEY='flip7-score-v1';
+let state=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||null}catch(e){return null}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function setup(){
+ document.getElementById('app').innerHTML=`<div class="brand"><div class="logo">7</div><div><h1>Flip 7 Score</h1><p>Marcador local para iPhone</p></div></div>
+ <section class="card"><h2>Nueva partida</h2><p class="hint">Añade jugadores y empieza. La partida se guarda automáticamente en este dispositivo.</p>
+ <div id="names"></div><button class="btn secondary" onclick="addName()">+ Añadir jugador</button>
+ <div class="field" style="margin-top:14px"><label>Puntuación objetivo</label><input id="target" type="number" inputmode="numeric" min="1" value="200"></div>
+ <button class="btn primary" style="width:100%;margin-top:14px" onclick="startGame()">Empezar partida</button></section>`;
+ for(let i=0;i<4;i++) addName();
+}
+function addName(value=''){
+ const box=document.getElementById('names'); if(box.children.length>=12)return;
+ const n=box.children.length+1; const wrap=document.createElement('div'); wrap.className='player-name row';
+ wrap.innerHTML=`<input type="text" maxlength="24" placeholder="Jugador ${n}" value="${esc(value)}" style="flex:1"><button class="btn secondary small" aria-label="Eliminar" onclick="this.parentElement.remove();renumber()">✕</button>`; box.appendChild(wrap);
+}
+function renumber(){[...document.querySelectorAll('#names input')].forEach((x,i)=>x.placeholder='Jugador '+(i+1))}
+function startGame(){
+ const names=[...document.querySelectorAll('#names input')].map((x,i)=>x.value.trim()||`Jugador ${i+1}`); if(names.length<2){alert('Añade al menos 2 jugadores.');return}
+ const target=Math.max(1,parseInt(document.getElementById('target').value)||200);
+ state={target,players:names.map((name,i)=>({id:'p'+Date.now()+i,name,total:0})),rounds:[],created:Date.now()}; save(); render();
+}
+function calcRow(id){
+ const bust=document.getElementById('bust-'+id)?.checked; if(bust)return 0;
+ const nums=parseInt(document.getElementById('nums-'+id)?.value)||0;
+ const x2=document.getElementById('x2-'+id)?.checked; const mods=parseInt(document.getElementById('mods-'+id)?.value)||0;
+ const f7=document.getElementById('f7-'+id)?.checked; return (nums*(x2?2:1))+mods+(f7?15:0);
+}
+function refreshPreview(id){const v=calcRow(id),el=document.getElementById('prev-'+id),b=document.getElementById('bust-'+id)?.checked; if(el)el.innerHTML=b?`Ronda: <span class="zero">0 (se pasó)</span>`:`Ronda: ${v}`}
+function endRound(){
+ const details=state.players.map(p=>({id:p.id,numbers:parseInt(document.getElementById('nums-'+p.id).value)||0,x2:document.getElementById('x2-'+p.id).checked,mods:parseInt(document.getElementById('mods-'+p.id).value)||0,flip7:document.getElementById('f7-'+p.id).checked,bust:document.getElementById('bust-'+p.id).checked,score:calcRow(p.id)}));
+ if(!confirm('¿Guardar esta ronda?'))return;
+ details.forEach(d=>state.players.find(p=>p.id===d.id).total+=d.score); state.rounds.push({at:Date.now(),details}); save(); render();
+}
+function undo(){if(!state.rounds.length)return; if(!confirm('¿Deshacer la última ronda?'))return; const r=state.rounds.pop(); r.details.forEach(d=>state.players.find(p=>p.id===d.id).total-=d.score); save(); render()}
+function newGame(){if(!confirm('Se borrará la partida actual. ¿Continuar?'))return; localStorage.removeItem(KEY); state=null; setup()}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='flip7-partida.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function render(){if(!state){setup();return} const app=document.getElementById('app'); const max=Math.max(...state.players.map(p=>p.total)); const finished=state.players.some(p=>p.total>=state.target); const ranking=[...state.players].sort((a,b)=>b.total-a.total);
+ app.innerHTML=`<div class="brand"><div class="logo">7</div><div><h1>Flip 7 Score</h1><p>Ronda ${state.rounds.length+1} · objetivo ${state.target}</p></div></div>
+ ${finished?`<section class="card winner"><h2>🏆 Partida terminada</h2><div>${ranking.map((p,i)=>`${i+1}. <b>${esc(p.name)}</b> — ${p.total} puntos`).join('<br>')}</div></section>`:''}
+ <section class="scoreboard">${state.players.map(p=>`<div class="score ${p.total===max&&state.rounds.length?'leader':''}"><div class="name">${esc(p.name)}</div><div class="total">${p.total}</div></div>`).join('')}</section>
+ ${!finished?`<section class="card"><div class="row between"><div><h2 style="margin:0">Puntuación de ronda</h2><div class="hint">Introduce la suma de cartas numéricas; la app aplica el resto.</div></div><span class="pill">Ronda ${state.rounds.length+1}</span></div>
+ ${state.players.map(p=>`<div class="round-player"><h3>${esc(p.name)}</h3><div class="grid"><div class="field"><label>Suma cartas numéricas</label><input id="nums-${p.id}" type="number" inputmode="numeric" min="0" value="0" oninput="refreshPreview('${p.id}')"></div><div class="field"><label>Modificadores (+2, +4…)</label><input id="mods-${p.id}" type="number" inputmode="numeric" min="0" value="0" oninput="refreshPreview('${p.id}')"></div></div><div class="checks"><label class="check"><input id="x2-${p.id}" type="checkbox" onchange="refreshPreview('${p.id}')"> ×2</label><label class="check"><input id="f7-${p.id}" type="checkbox" onchange="refreshPreview('${p.id}')"> Flip 7 (+15)</label><label class="check"><input id="bust-${p.id}" type="checkbox" onchange="refreshPreview('${p.id}')"> Se pasó (0)</label></div><div class="preview" id="prev-${p.id}">Ronda: 0</div></div>`).join('')}
+ <button class="btn primary" style="width:100%;margin-top:8px" onclick="endRound()">Guardar ronda</button></section>`:''}
+ <section class="card"><div class="row between"><h2 style="margin:0">Historial</h2>${state.rounds.length?`<button class="btn secondary small" onclick="undo()">↶ Deshacer última</button>`:''}</div>${state.rounds.length?state.rounds.slice().reverse().map((r,idx)=>`<div class="history-item"><span>Ronda ${state.rounds.length-idx}</span><span>${r.details.map(d=>{const p=state.players.find(x=>x.id===d.id);return `${esc(p?.name||'?')} +${d.score}`}).join(' · ')}</span></div>`).join(''):'<p class="hint">Todavía no hay rondas guardadas.</p>'}</section>
+ <div class="actions"><button class="btn secondary" onclick="exportData()">Exportar copia</button><button class="btn danger" onclick="newGame()">Nueva partida</button></div><div class="footer">Los datos se guardan solo en este dispositivo.</div>`;
+}
+render();
+</script></body></html>

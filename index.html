@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111318">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Marcadores">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Marcadores · Juegos de mesa</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#0d0f12;--panel:#181b21;--panel2:#222630;--text:#f6f7f8;--muted:#aeb4c0;--line:#303642;--yellow:#ffcc33;--orange:#ff9e54}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);padding:calc(22px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}.app{max-width:720px;margin:auto}.brand{display:flex;align-items:center;gap:13px;margin-bottom:22px}.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--yellow),var(--orange));color:#17120b;display:grid;place-items:center;font-size:27px;font-weight:950;box-shadow:0 10px 30px #0008}.brand h1{margin:0;font-size:30px;line-height:1.05}.brand p{margin:5px 0 0;color:var(--muted);font-size:14px}.intro{color:var(--muted);line-height:1.5;margin:0 0 18px}.games{display:grid;gap:14px}.game{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 24px #0003;transition:transform .12s ease}.game:active{transform:scale(.985)}.game-top{display:flex;align-items:center;gap:13px}.game-icon{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:26px;font-weight:950;flex:none}.flip .game-icon{background:var(--yellow);color:#111}.cuenta .game-icon{background:var(--orange);color:#2b1407}.game h2{font-size:22px;margin:0}.game p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.4}.status{margin-top:14px;padding:10px 12px;border-radius:12px;background:var(--panel2);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:10px}.status strong{color:var(--text)}.footer{margin-top:24px;text-align:center;color:var(--muted);font-size:12px;line-height:1.45}.install-tip{margin-top:18px;background:#141a18;border:1px solid #2c4338;border-radius:16px;padding:14px;color:#cfe9db;font-size:13px;line-height:1.45}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="brand"><div class="logo">🎲</div><div><h1>Marcadores</h1><p>Tus juegos de mesa, en una sola app</p></div></div>
+  <p class="intro">Elige un juego. Cada marcador guarda su partida automáticamente en este dispositivo y funciona sin conexión después de la primera carga.</p>
+  <section class="games">
+    <a class="game flip" href="./flip7/">
+      <div class="game-top"><div class="game-icon">7</div><div><h2>Flip 7</h2><p>Rondas, ×2, modificadores, Flip 7 y jugadores que se pasan.</p></div></div>
+      <div class="status" id="flipStatus"><span>Sin partida activa</span><strong>Abrir →</strong></div>
+    </a>
+    <a class="game cuenta" href="./lacuenta/">
+      <div class="game-top"><div class="game-icon">€</div><div><h2>La Cuenta</h2><p>Ahorros, pagos por bar, aumentos de mano e historial.</p></div></div>
+      <div class="status" id="cuentaStatus"><span>Sin partida activa</span><strong>Abrir →</strong></div>
+    </a>
+  </section>
+  <div class="install-tip">💡 Añade esta pantalla a <b>Inicio</b> en el iPhone y tendrás un único icono. Desde él podrás entrar en cualquiera de los juegos.</div>
+  <div class="footer">Los datos de las partidas se guardan únicamente en el almacenamiento local del navegador.</div>
+</main>
+<script>
+function read(key){try{return JSON.parse(localStorage.getItem(key))||null}catch(e){return null}}
+function updateStatuses(){
+  const f=read('flip7-score-v1');
+  const l=read('la-cuenta-score-v1');
+  if(f?.players?.length){
+    const leader=[...f.players].sort((a,b)=>b.total-a.total)[0];
+    document.getElementById('flipStatus').innerHTML=`<span><strong>${f.players.length} jugadores</strong> · Ronda ${f.rounds.length+1} · líder ${escapeHtml(leader.name)} (${leader.total})</span><strong>Abrir →</strong>`;
+  }
+  if(l?.players?.length){
+    const leader=[...l.players].sort((a,b)=>b.money-a.money)[0];
+    document.getElementById('cuentaStatus').innerHTML=`<span><strong>${l.players.length} jugadores</strong> · Bar ${l.rounds.length+1} · ${escapeHtml(leader.name)} ${leader.money.toLocaleString('es-ES')} €</span><strong>Abrir →</strong>`;
+  }
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+updateStatuses();
+window.addEventListener('pageshow',updateStatuses);
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+</script>
+</body>
+</html>
