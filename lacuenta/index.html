@@ -108,7 +108,7 @@ function payRound(){
   const amount=Math.max(0,parseFloat(document.getElementById('amount').value)||0);
   if(amount<=0){alert('Introduce el importe de la cuenta.');return}
   const payerIds=selectedPayerIds();
-  if(!payerIds.length){alert('Selecciona quién paga la cuenta.');return}
+  if(!payerIds.length){alert('Selecciona quiénes pagan la cuenta.');return}
   const handBonus=document.getElementById('handBonus').checked;
   const split=calculateSplit(amount,payerIds);
   const summary=split.map(s=>{
