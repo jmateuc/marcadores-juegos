@@ -3,53 +3,202 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#111318">
+<meta name="theme-color" content="#2a1712">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Marcadores">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<title>Marcadores · Juegos de mesa</title>
+<meta name="apple-mobile-web-app-title" content="La Cuenta">
+<title>La Cuenta · Marcador</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#0d0f12;--panel:#181b21;--panel2:#222630;--text:#f6f7f8;--muted:#aeb4c0;--line:#303642;--yellow:#ffcc33;--orange:#ff9e54}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);padding:calc(22px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}.app{max-width:720px;margin:auto}.brand{display:flex;align-items:center;gap:13px;margin-bottom:22px}.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--yellow),var(--orange));color:#17120b;display:grid;place-items:center;font-size:27px;font-weight:950;box-shadow:0 10px 30px #0008}.brand h1{margin:0;font-size:30px;line-height:1.05}.brand p{margin:5px 0 0;color:var(--muted);font-size:14px}.intro{color:var(--muted);line-height:1.5;margin:0 0 18px}.games{display:grid;gap:14px}.game{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 24px #0003;transition:transform .12s ease}.game:active{transform:scale(.985)}.game-top{display:flex;align-items:center;gap:13px}.game-icon{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:26px;font-weight:950;flex:none}.flip .game-icon{background:var(--yellow);color:#111}.cuenta .game-icon{background:var(--orange);color:#2b1407}.game h2{font-size:22px;margin:0}.game p{margin:5px 0 0;color:var(--muted);font-size:14px;line-height:1.4}.status{margin-top:14px;padding:10px 12px;border-radius:12px;background:var(--panel2);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:10px}.status strong{color:var(--text)}.footer{margin-top:24px;text-align:center;color:var(--muted);font-size:12px;line-height:1.45}.install-tip{margin-top:18px;background:#141a18;border:1px solid #2c4338;border-radius:16px;padding:14px;color:#cfe9db;font-size:13px;line-height:1.45}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#130e0b;--panel:#221713;--panel2:#30211b;--text:#fff7ef;--muted:#c8b3a7;--accent:#ff9e54;--danger:#ff665e;--ok:#69d98a;--line:#493329}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom))}.app{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}.logo{width:48px;height:48px;border-radius:14px;background:var(--accent);color:#2b1407;display:grid;place-items:center;font-size:27px;font-weight:900;box-shadow:0 8px 24px #0008}.brand h1{margin:0;font-size:28px}.brand p{margin:2px 0 0;color:var(--muted);font-size:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #0003}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}input,select,button{font:inherit}input[type=text],input[type=number],select{width:100%;background:#120d0b;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px}.player-name{margin:8px 0}.btn{border:0;border-radius:13px;padding:13px 16px;font-weight:800;min-height:48px;cursor:pointer}.primary{background:var(--accent);color:#261207}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.danger{background:#3a1717;color:#ffb5b0;border:1px solid #6b2727}.small{min-height:40px;padding:9px 12px;font-size:14px}.balances{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.balance{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.balance .name{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.balance .money{font-size:29px;font-weight:900;margin-top:3px}.balance .hand{font-size:12px;color:var(--muted);margin-top:4px}.rich{border-color:#81532f;box-shadow:inset 0 0 0 1px #81532f}.out .money{color:var(--danger)}.field{margin:11px 0}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}.check{display:flex;align-items:flex-start;gap:9px;background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:12px;font-size:14px;line-height:1.35}.check input{width:22px;height:22px;flex:none}.payer-list{display:grid;gap:8px}.payer-check{cursor:pointer;align-items:center}.payer-check.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.split-preview{margin-top:10px;padding:12px;border-radius:12px;background:#120d0b;border:1px solid var(--line)}.split-preview strong{color:var(--accent)}.split-line{display:flex;justify-content:space-between;gap:12px;padding:3px 0}.hint{color:var(--muted);font-size:13px;line-height:1.4}.winner{background:#20311f;border-color:#3d6c3d}.winner h2{margin:0 0 6px;color:#a7f0a7}.history-item{padding:11px 0;border-top:1px solid var(--line);font-size:14px}.history-item:first-child{border-top:0}.history-top{display:flex;justify-content:space-between;gap:12px}.pill{display:inline-block;background:var(--panel2);padding:4px 8px;border-radius:999px;color:var(--muted);font-size:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}@media(min-width:600px){.balances{grid-template-columns:repeat(4,1fr)}}
+.home-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-weight:750;font-size:14px;margin:0 0 14px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
 </style>
 </head>
-<body>
-<main class="app">
-  <div class="brand"><div class="logo">🎲</div><div><h1>Marcadores</h1><p>Tus juegos de mesa, en una sola app</p></div></div>
-  <p class="intro">Elige un juego. Cada marcador guarda su partida automáticamente en este dispositivo y funciona sin conexión después de la primera carga.</p>
-  <section class="games">
-    <a class="game flip" href="./flip7/">
-      <div class="game-top"><div class="game-icon">7</div><div><h2>Flip 7</h2><p>Rondas, ×2, modificadores, Flip 7 y jugadores que se pasan.</p></div></div>
-      <div class="status" id="flipStatus"><span>Sin partida activa</span><strong>Abrir →</strong></div>
-    </a>
-    <a class="game cuenta" href="./lacuenta/">
-      <div class="game-top"><div class="game-icon">€</div><div><h2>La Cuenta</h2><p>Ahorros, pagos por bar, aumentos de mano e historial.</p></div></div>
-      <div class="status" id="cuentaStatus"><span>Sin partida activa</span><strong>Abrir →</strong></div>
-    </a>
-  </section>
-  <div class="install-tip">💡 Añade esta pantalla a <b>Inicio</b> en el iPhone y tendrás un único icono. Desde él podrás entrar en cualquiera de los juegos.</div>
-  <div class="footer">Los datos de las partidas se guardan únicamente en el almacenamiento local del navegador.</div>
-</main>
+<body><div class="app"><a class="home-link" href="../">‹ Todos los juegos</a></div><main class="app" id="app"></main>
 <script>
-function read(key){try{return JSON.parse(localStorage.getItem(key))||null}catch(e){return null}}
-function updateStatuses(){
-  const f=read('flip7-score-v1');
-  const l=read('la-cuenta-score-v1');
-  if(f?.players?.length){
-    const leader=[...f.players].sort((a,b)=>b.total-a.total)[0];
-    document.getElementById('flipStatus').innerHTML=`<span><strong>${f.players.length} jugadores</strong> · Ronda ${f.rounds.length+1} · líder ${escapeHtml(leader.name)} (${leader.total})</span><strong>Abrir →</strong>`;
-  }
-  if(l?.players?.length){
-    const leader=[...l.players].sort((a,b)=>b.money-a.money)[0];
-    document.getElementById('cuentaStatus').innerHTML=`<span><strong>${l.players.length} jugadores</strong> · Bar ${l.rounds.length+1} · ${escapeHtml(leader.name)} ${leader.money.toLocaleString('es-ES')} €</span><strong>Abrir →</strong>`;
-  }
+const KEY='la-cuenta-score-v1';
+const INITIAL={3:900,4:1000,5:1100,6:1200,7:1300,8:1400};
+let state=load();
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||null}catch(e){return null}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function money(n){return Number(n).toLocaleString('es-ES',{minimumFractionDigits:Number(n)%1?2:0,maximumFractionDigits:2})+' €'}
+
+function setup(){
+  document.getElementById('app').innerHTML=`<div class="brand"><div class="logo">€</div><div><h1>La Cuenta</h1><p>Control de ahorros y bares</p></div></div><section class="card"><h2>Nueva partida</h2><p class="hint">De 3 a 8 jugadores.
+Los ahorros iniciales se calculan automáticamente según el número de jugadores.</p><div id="names"></div><button class="btn secondary" onclick="addName()">+ Añadir jugador</button><div id="initialInfo" class="hint" style="margin-top:12px"></div><button class="btn primary" style="width:100%;margin-top:14px" onclick="startGame()">Empezar partida</button></section>`;
+  for(let i=0;i<4;i++)addName();
+  updateInitialInfo();
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-updateStatuses();
-window.addEventListener('pageshow',updateStatuses);
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
-</script>
-</body>
-</html>
+
+function addName(value=''){
+  const box=document.getElementById('names');
+  if(box.children.length>=8)return;
+  const n=box.children.length+1;
+  const wrap=document.createElement('div');
+  wrap.className='player-name row';
+  wrap.innerHTML=`<input type="text" maxlength="24" placeholder="Jugador ${n}" value="${esc(value)}" style="flex:1"><button class="btn secondary small" aria-label="Eliminar" onclick="this.parentElement.remove();renumber();updateInitialInfo()">✕</button>`;
+  box.appendChild(wrap);
+  updateInitialInfo();
+}
+
+function renumber(){[...document.querySelectorAll('#names input')].forEach((x,i)=>x.placeholder='Jugador '+(i+1))}
+
+function updateInitialInfo(){
+  const n=document.querySelectorAll('#names input').length;
+  const el=document.getElementById('initialInfo');
+  if(!el)return;
+  el.textContent=INITIAL[n]?`${n} jugadores → ${INITIAL[n].toLocaleString('es-ES')} € iniciales por jugador.`:'La Cuenta se juega de 3 a 8 jugadores.';
+}
+
+function startGame(){
+  const inputs=[...document.querySelectorAll('#names input')];
+  const n=inputs.length;
+  if(n<3||n>8){alert('La Cuenta necesita entre 3 y 8 jugadores.');return}
+  const start=INITIAL[n];
+  const names=inputs.map((x,i)=>x.value.trim()||`Jugador ${i+1}`);
+  state={start,players:names.map((name,i)=>({id:'p'+Date.now()+i,name,money:start,handBonus:0})),rounds:[],created:Date.now()};
+  save();
+  render();
+}
+
+function selectedPayerIds(){
+  return [...document.querySelectorAll('.payer-choice:checked')].map(x=>x.value);
+}
+
+function calculateSplit(amount,payerIds){
+  if(!payerIds.length||amount<=0)return [];
+  const cents=Math.round(amount*100);
+  const base=Math.floor(cents/payerIds.length);
+  let remainder=cents-(base*payerIds.length);
+  return payerIds.map(id=>{
+    const share=base+(remainder>0?1:0);
+    if(remainder>0)remainder--;
+    return {id,amount:share/100};
+  });
+}
+
+function updateSplitPreview(){
+  const amount=Math.max(0,parseFloat(document.getElementById('amount')?.value)||0);
+  const payerIds=selectedPayerIds();
+  document.querySelectorAll('.payer-check').forEach(label=>{
+    const input=label.querySelector('.payer-choice');
+    label.classList.toggle('selected',!!input?.checked);
+  });
+  const preview=document.getElementById('splitPreview');
+  if(!preview)return;
+  if(!payerIds.length){
+    preview.innerHTML='<span class="hint">Marca al menos una persona que pague la cuenta.</span>';
+    return;
+  }
+  if(amount<=0){
+    preview.innerHTML='<span class="hint">Introduce el importe para ver el reparto.</span>';
+    return;
+  }
+  const split=calculateSplit(amount,payerIds);
+  preview.innerHTML=`<div class="hint" style="margin-bottom:6px">Reparto automático</div>${split.map(s=>{
+    const p=state.players.find(x=>x.id===s.id);
+    return `<div class="split-line"><span>${esc(p?.name||'?')}</span><strong>${money(s.amount)}</strong></div>`;
+  }).join('')}`;
+}
+
+function payRound(){
+  const amount=Math.max(0,parseFloat(document.getElementById('amount').value)||0);
+  if(amount<=0){alert('Introduce el importe de la cuenta.');return}
+  const payerIds=selectedPayerIds();
+  if(!payerIds.length){alert('Selecciona quién paga la cuenta.');return}
+  const handBonus=document.getElementById('handBonus').checked;
+  const split=calculateSplit(amount,payerIds);
+  const summary=split.map(s=>{
+    const p=state.players.find(x=>x.id===s.id);
+    return `${p?.name||'?'}: ${money(s.amount)}`;
+  }).join('\n');
+  if(!confirm(`Cuenta: ${money(amount)}\n\n${summary}\n\n¿Guardar el bar?`))return;
+
+  split.forEach(s=>{
+    const payer=state.players.find(p=>p.id===s.id);
+    if(payer)payer.money-=s.amount;
+  });
+
+  if(handBonus){
+    split.forEach(s=>{
+      const payer=state.players.find(p=>p.id===s.id);
+      if(payer)payer.handBonus+=1;
+    });
+  }
+
+  state.rounds.push({
+    at:Date.now(),
+    amount,
+    payers:split.map(s=>({payerId:s.id,amount:s.amount})),
+    handBonus
+  });
+  save();
+  render();
+}
+
+function undo(){
+  if(!state.rounds.length)return;
+  if(!confirm('¿Deshacer el último bar?'))return;
+  const r=state.rounds.pop();
+
+  if(Array.isArray(r.payers)){
+    r.payers.forEach(item=>{
+      const p=state.players.find(x=>x.id===item.payerId);
+      if(!p)return;
+      p.money+=Number(item.amount)||0;
+      if(r.handBonus)p.handBonus=Math.max(0,p.handBonus-1);
+    });
+  }else{
+    // Compatibilidad con partidas guardadas por la versión anterior.
+    const p=state.players.find(x=>x.id===r.payerId);
+    if(p){
+      p.money+=Number(r.amount)||0;
+      if(r.handBonus)p.handBonus=Math.max(0,p.handBonus-1);
+    }
+  }
+
+  save();
+  render();
+}
+
+function newGame(){
+  if(!confirm('Se borrará la partida actual. ¿Continuar?'))return;
+  localStorage.removeItem(KEY);
+  state=null;
+  setup();
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='la-cuenta-partida.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function historyPaymentText(r){
+  if(Array.isArray(r.payers)){
+    return r.payers.map(item=>{
+      const p=state.players.find(x=>x.id===item.payerId);
+      return `${esc(p?.name||'?')} (${money(item.amount)})`;
+    }).join(' · ');
+  }
+  const p=state.players.find(x=>x.id===r.payerId);
+  return `${esc(p?.name||'?')} (${money(r.amount)})`;
+}
+
+function render(){
+  if(!state){setup();return}
+  const app=document.getElementById('app');
+  const max=Math.max(...state.players.map(p=>p.money));
+  const finished=state.players.some(p=>p.money<=0);
+  const ranking=[...state.players].sort((a,b)=>b.money-a.money);
+
+  app.innerHTML=`<div class="brand"><div class="logo">€</div><div><h1>La Cuenta</h1><p>Bar ${state.rounds.length+1} · inicio ${state.start.toLocaleString('es-ES')} €</p></div></div>${finished?`<section class="card winner"><h2>🏆 Partida terminada</h2><div>${ranking.map((p,i)=>`${i+1}.
+<b>${esc(p.name)}</b> — ${money(p.money)}`).join('<br>')}</div></section>`:''}<section class="balances">${state.players.map(p=>`<div class="balance ${p.money===max&&state.rounds.length?'rich':''} ${p.money<=0?'out':''}"><div class="name">${esc(p.name)}</div><div class="money">${money(p.money)}</div><div class="hand">Incrementos de mano: +${p.handBonus}</div></div>`).join('')}</section>${!finished?`<section class="card"><div class="row between"><h2 style="margin:0">Cerrar bar</h2><span class="pill">Bar ${state.rounds.length+1}</span></div><div class="field"><label>Importe total de la cuenta</label><input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ej. 180" oninput="updateSplitPreview()"></div><div class="field"><label>¿Quiénes pagan?</label><div class="payer-list">${state.players.map(p=>`<label class="check payer-check"><input class="payer-choice" type="checkbox" value="${p.id}" onchange="updateSplitPreview()"><span><b>${esc(p.name)}</b><br><span class="hint">${money(p.money)} disponibles</span></span></label>`).join('')}</div><div id="splitPreview" class="split-preview"><span class="hint">Marca al menos una persona que pague la cuenta.</span></div></div><label class="check"><input id="handBonus" type="checkbox" checked><span><b>Ganan +1 de mano</b><br><span class="hint">Déjalo marcado en una ronda normal. Desmárcalo si la cuenta se pidió antes de que todos los participantes la hubieran pedido.</span></span></label><button class="btn primary" style="width:100%;margin-top:14px" onclick="payRound()">Registrar pago</button></section>`:''}<section class="card"><div class="row between"><h2 style="margin:0">Historial de bares</h2>${state.rounds.length?`<button class="btn secondary small" onclick="undo()">↶ Deshacer último</button>`:''}</div>${state.rounds.length?state.rounds.slice().reverse().map((r,idx)=>`<div class="history-item"><div class="history-top"><b>Bar ${state.rounds.length-idx}</b><span>${money(r.amount)}</span></div><div class="hint">Pagaron ${historyPaymentText(r)}${r.handBonus?' · +1 de mano':' · sin aumento de mano'}</div></div>`).join(''):'<p class="hint">Todavía no hay bares guardados.</p>'}</section><div class="actions"><button class="btn secondary" onclick="exportData()">Exportar copia</button><button class="btn danger" onclick="newGame()">Nueva partida</button></div><div class="footer">Los datos se guardan solo en este dispositivo.</div>`;
+}
+
+render();
