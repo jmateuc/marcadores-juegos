@@ -1,4 +1,4 @@
-const CACHE='marcadores-juegos-v6';
+const CACHE='marcadores-juegos-v7';
 
 const ASSETS=[
   './',
@@ -9,7 +9,7 @@ const ASSETS=[
   './flip7/',
   './flip7/index.html',
   './lacuenta/',
-  './lacuenta/index.html'
+  './lacuenta/index.html',
   './assets/images/flip7-banner.PNG',
   './assets/images/la-cuenta-banner.PNG'
 ];
