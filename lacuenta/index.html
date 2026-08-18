@@ -13,9 +13,31 @@
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark;--bg:#130e0b;--panel:#221713;--panel2:#30211b;--text:#fff7ef;--muted:#c8b3a7;--accent:#ff9e54;--danger:#ff665e;--ok:#69d98a;--line:#493329}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom))}.app{max-width:760px;margin:auto}.brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}.logo{width:48px;height:48px;border-radius:14px;background:var(--accent);color:#2b1407;display:grid;place-items:center;font-size:27px;font-weight:900;box-shadow:0 8px 24px #0008}.brand h1{margin:0;font-size:28px}.brand p{margin:2px 0 0;color:var(--muted);font-size:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #0003}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}input,select,button{font:inherit}input[type=text],input[type=number],select{width:100%;background:#120d0b;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px}.player-name{margin:8px 0}.btn{border:0;border-radius:13px;padding:13px 16px;font-weight:800;min-height:48px;cursor:pointer}.primary{background:var(--accent);color:#261207}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.danger{background:#3a1717;color:#ffb5b0;border:1px solid #6b2727}.small{min-height:40px;padding:9px 12px;font-size:14px}.balances{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.balance{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.balance .name{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.balance .money{font-size:29px;font-weight:900;margin-top:3px}.balance .hand{font-size:12px;color:var(--muted);margin-top:4px}.rich{border-color:#81532f;box-shadow:inset 0 0 0 1px #81532f}.out .money{color:var(--danger)}.field{margin:11px 0}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}.check{display:flex;align-items:flex-start;gap:9px;background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:12px;font-size:14px;line-height:1.35}.check input{width:22px;height:22px;flex:none}.payer-list{display:grid;gap:8px}.payer-check{cursor:pointer;align-items:center}.payer-check.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.split-preview{margin-top:10px;padding:12px;border-radius:12px;background:#120d0b;border:1px solid var(--line)}.split-preview strong{color:var(--accent)}.split-line{display:flex;justify-content:space-between;gap:12px;padding:3px 0}.hint{color:var(--muted);font-size:13px;line-height:1.4}.winner{background:#20311f;border-color:#3d6c3d}.winner h2{margin:0 0 6px;color:#a7f0a7}.history-item{padding:11px 0;border-top:1px solid var(--line);font-size:14px}.history-item:first-child{border-top:0}.history-top{display:flex;justify-content:space-between;gap:12px}.pill{display:inline-block;background:var(--panel2);padding:4px 8px;border-radius:999px;color:var(--muted);font-size:12px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}@media(min-width:600px){.balances{grid-template-columns:repeat(4,1fr)}}
 .home-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-weight:750;font-size:14px;margin:0 0 14px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.game-hero{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  display:block;
+  border-radius:18px;
+  border:1px solid var(--line);
+  box-shadow:0 8px 24px #0004;
+  margin:0 0 18px;
+}
 </style>
 </head>
-<body><div class="app"><a class="home-link" href="../">‹ Todos los juegos</a></div><main class="app" id="app"></main>
+<body>
+
+<div class="app">
+  <a class="home-link" href="../">‹ Todos los juegos</a>
+
+  <img
+    class="game-hero"
+    src="../assets/images/la-cuenta-banner.PNG"
+    alt="La Cuenta"
+  >
+</div>
+
+<main class="app" id="app"></main>
 <script>
 const KEY='la-cuenta-score-v1';
 const INITIAL={3:900,4:1000,5:1100,6:1200,7:1300,8:1400};
