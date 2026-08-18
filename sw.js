@@ -1,4 +1,4 @@
-const CACHE='marcadores-juegos-v5';
+const CACHE='marcadores-juegos-v6';
 
 const ASSETS=[
   './',
@@ -10,6 +10,8 @@ const ASSETS=[
   './flip7/index.html',
   './lacuenta/',
   './lacuenta/index.html'
+  './assets/images/flip7-banner.PNG',
+  './assets/images/la-cuenta-banner.PNG'
 ];
 
 self.addEventListener('install',event=>{
