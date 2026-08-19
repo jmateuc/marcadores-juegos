@@ -1,4 +1,4 @@
-<!-- VERSION PAGOS MULTIPLES + CALCULADORA - LA CUENTA -->
+<!-- VERSION PAGOS MULTIPLES + CALCULADORA + SOLICITANTE - LA CUENTA -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -1091,6 +1091,18 @@ function payRound(){
     return;
   }
 
+  const requesterId=
+    document.getElementById('requesterId')?.value;
+
+  if(!requesterId){
+
+    alert(
+      'Selecciona quién pide la cuenta.'
+    );
+
+    return;
+  }
+
   const payerIds=
     selectedPayerIds();
 
@@ -1114,6 +1126,11 @@ function payRound(){
       payerIds
     );
 
+  const requester=
+    state.players.find(
+      p=>p.id===requesterId
+    );
+
   const summary=
     split.map(s=>{
 
@@ -1126,11 +1143,18 @@ function payRound(){
 
     }).join('\n');
 
+  const bonusSummary=
+    handBonus
+      ? `\n\n+1 de mano para ${requester?.name||'quien pide la cuenta'}`
+      : '\n\nSin aumento de mano';
+
   if(
     !confirm(
       `Cuenta: ${money(amount)}
 
-${summary}
+Pide: ${requester?.name||'?'}
+
+${summary}${bonusSummary}
 
 ¿Guardar el bar?`
     )
@@ -1152,19 +1176,9 @@ ${summary}
   });
 
 
-  if(handBonus){
+  if(handBonus && requester){
 
-    split.forEach(s=>{
-
-      const payer=
-        state.players.find(
-          p=>p.id===s.id
-        );
-
-      if(payer){
-        payer.handBonus+=1;
-      }
-    });
+    requester.handBonus+=1;
   }
 
 
@@ -1173,6 +1187,8 @@ ${summary}
     at:Date.now(),
 
     amount,
+
+    requesterId,
 
     payers:
       split.map(s=>({
@@ -1222,16 +1238,48 @@ function undo(){
       }
 
       p.money+=Number(item.amount)||0;
-
-      if(r.handBonus){
-
-        p.handBonus=
-          Math.max(
-            0,
-            p.handBonus-1
-          );
-      }
     });
+
+    if(r.handBonus){
+
+      if(r.requesterId){
+
+        const requester=
+          state.players.find(
+            x=>x.id===r.requesterId
+          );
+
+        if(requester){
+
+          requester.handBonus=
+            Math.max(
+              0,
+              requester.handBonus-1
+            );
+        }
+
+      }else{
+
+        /* Compatibilidad con bares antiguos:
+           antes el +1 se aplicaba a todos los pagadores. */
+        r.payers.forEach(item=>{
+
+          const p=
+            state.players.find(
+              x=>x.id===item.payerId
+            );
+
+          if(p){
+
+            p.handBonus=
+              Math.max(
+                0,
+                p.handBonus-1
+              );
+          }
+        });
+      }
+    }
 
   }else{
 
@@ -1336,6 +1384,21 @@ function historyPaymentText(r){
     );
 
   return `${esc(p?.name||'?')} (${money(r.amount)})`;
+}
+
+
+function historyRequesterText(r){
+
+  if(!r.requesterId){
+    return '';
+  }
+
+  const p=
+    state.players.find(
+      x=>x.id===r.requesterId
+    );
+
+  return esc(p?.name||'?');
 }
 
 
@@ -1514,6 +1577,31 @@ function render(){
           <div class="field">
 
             <label>
+              ¿Quién pide la cuenta?
+            </label>
+
+            <select id="requesterId">
+
+              <option value="">
+                Selecciona jugador
+              </option>
+
+              ${
+                state.players.map(p=>`
+                  <option value="${p.id}">
+                    ${esc(p.name)}
+                  </option>
+                `).join('')
+              }
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
               ¿Quiénes pagan?
             </label>
 
@@ -1582,16 +1670,16 @@ function render(){
             <span>
 
               <b>
-                Ganan +1 de mano
+                Gana +1 de mano quien pide la cuenta
               </b>
 
               <br>
 
               <span class="hint">
                 Déjalo marcado en una ronda normal.
-                Desmárcalo si la cuenta se pidió antes
-                de que todos los participantes
-                la hubieran pedido.
+                El aumento se aplica solo al jugador
+                que ha pedido la cuenta, aunque paguen
+                varias personas.
               </span>
 
             </span>
@@ -1644,7 +1732,19 @@ function render(){
           .slice()
           .reverse()
           .map(
-            (r,idx)=>`
+            (r,idx)=>{
+
+              const requester=
+                historyRequesterText(r);
+
+              const bonusText=
+                r.handBonus
+                  ? requester
+                    ? ` · +1 de mano para ${requester}`
+                    : ' · +1 de mano'
+                  : ' · sin aumento de mano';
+
+              return `
 
               <div class="history-item">
 
@@ -1662,20 +1762,24 @@ function render(){
 
                 <div class="hint">
 
+                  ${
+                    requester
+                      ? `Pidió ${requester} · `
+                      : ''
+                  }
+
                   Pagaron
                   ${historyPaymentText(r)}
 
-                  ${
-                    r.handBonus
-                    ?' · +1 de mano'
-                    :' · sin aumento de mano'
-                  }
+                  ${bonusText}
 
                 </div>
 
               </div>
 
-            `
+            `;
+
+            }
           ).join('')
         :`
           <p class="hint">
